@@ -9,7 +9,7 @@ class Solution(object):
         deck.sort(reverse=True)
         n = len(deck)
         deck = deque(deck)
-        ans = deque([deck.popleft()])
+        ans = deque()
         while len(ans) < n:
             ans.appendleft(deck.popleft())
             ans.appendleft(ans.pop())

@@ -16,7 +16,7 @@ class Solution(object):
             hashmap[rank] = 1 + hashmap.get(rank, 0)
             if hashmap[rank] == 2:
                 pair = True
-            elif hashmap[rank] == 3:
+            if hashmap[rank] == 3:
                 three = True
         
         return "Flush" if flush else "Three of a Kind" if three else "Pair" if pair else "High Card"

@@ -5,9 +5,16 @@ class Solution(object):
         :type k: int
         :rtype: List[int]
         """
-        count = {}
-        for num in nums:
-            count[num] = count.get(num, 0) + 1
-        values = [(value, key) for key, value in count.items()]
-        values.sort(reverse=True)
-        return [key for value, key in values[:k]]
+        heap = []
+        counter = {}
+        for n in nums:
+            counter[n] = 1 + counter.get(n, 0)
+        
+        for key, val in counter.items():
+            heapq.heappush(heap, (-val, key))
+        
+        res = []
+        while len(res) < k:
+            res.append(heapq.heappop(heap)[1])
+        
+        return res

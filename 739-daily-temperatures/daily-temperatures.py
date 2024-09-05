@@ -4,13 +4,12 @@ class Solution(object):
         :type temperatures: List[int]
         :rtype: List[int]
         """
-        st = []
-        res = [0] * len(temperatures)
-
+        stack = []
+        answer = [0 for _ in range(len(temperatures))]
         for i in range(len(temperatures)):
-            while st and temperatures[i] > temperatures[st[-1]]:
-                idx = st.pop()
-                res[idx] = i - idx
-            st.append(i)
-        
-        return res
+            temp = temperatures[i]
+            while stack and temp > stack[-1][1]:
+                index, prev = stack.pop()
+                answer[index] = i - index
+            stack.append([i, temp])
+        return answer

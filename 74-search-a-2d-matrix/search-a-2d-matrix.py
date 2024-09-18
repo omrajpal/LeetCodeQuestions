@@ -5,26 +5,32 @@ class Solution(object):
         :type target: int
         :rtype: bool
         """
-        if not matrix or not matrix[0]:
-            return False
-    
-        # Matrix dimensions
-        rows, cols = len(matrix), len(matrix[0])
+        top = 0
+        bot = len(matrix) - 1
+
+        while top <= bot:
+            mid = (top + bot) // 2
+
+            if matrix[mid][0] < target and matrix[mid][-1] > target:
+                break
+            elif matrix[mid][0] > target:
+                bot = mid - 1
+            else:
+                top = mid + 1
         
-        # Binary search on the 2D matrix treated as a 1D array
-        left, right = 0, rows * cols - 1
-        
+        row = (top + bot) // 2
+
+        left = 0
+        right = len(matrix[row]) - 1
+
         while left <= right:
             mid = (left + right) // 2
-            # Convert the 1D mid index back to 2D row and column
-            mid_value = matrix[mid // cols][mid % cols]
-            
-            if mid_value == target:
+
+            if matrix[row][mid] == target:
                 return True
-            elif mid_value < target:
-                left = mid + 1
-            else:
+            elif matrix[row][mid] > target:
                 right = mid - 1
+            else:
+                left = mid + 1
         
         return False
-            

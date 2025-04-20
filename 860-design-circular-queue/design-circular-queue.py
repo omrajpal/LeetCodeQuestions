@@ -1,10 +1,12 @@
+from array import array
+
 class MyCircularQueue(object):
 
     def __init__(self, k):
         """
         :type k: int
         """
-        self.queue = [None for i in range(k)]
+        self.queue = array('i', [0] * k)  # 'i' = signed int
         self.front = 0
         self.rear = 0
         self.size = 0
@@ -21,7 +23,9 @@ class MyCircularQueue(object):
         if self.size >= self.capacity:
             return False
         self.queue[self.rear] = value
-        self.rear = (self.rear + 1) % self.capacity
+        self.rear += 1
+        if self.rear == self.capacity:
+            self.rear = 0
         self.size += 1
         return True
 
@@ -33,7 +37,9 @@ class MyCircularQueue(object):
             return False
         ans = self.queue[self.front]
         self.size -= 1
-        self.front = (self.front + 1) % self.capacity
+        self.front += 1
+        if self.front == self.capacity:
+            self.front = 0
         return True
 
         
@@ -53,7 +59,7 @@ class MyCircularQueue(object):
         """
         if self.size <= 0:
             return -1
-        return self.queue[(self.front + self.size-1) % self.capacity]
+        return self.queue[(self.rear - 1) % self.capacity]
         
 
     def isEmpty(self):

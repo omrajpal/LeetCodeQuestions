@@ -6,24 +6,19 @@ class Solution(object):
         """
         ## go through the string, adding to a stack if open parenthesis, popping if closed
         stack = []
-        opens = []
-        ans = [""] * len(s)
-        curr = 0
-        for i in range(len(s)):
-            c = s[i]
-            if c == ')':
-                if len(stack) == 0:
-                    continue
-                stack.pop()
-            elif c == '(':
-                stack.append('(')
-                opens.append(curr)
-            ans[curr] = c
-            curr += 1
+        to_remove = set()
 
-        if len(stack) > 0:
-            for i in range(len(opens) - 1, len(opens) - len(stack) - 1, -1): ## index of last open parenthesis, until len(stack) is resolved
-                temp = opens[i]
-                ans[temp] = ""
-        
-        return ''.join(ans)
+        for i, c in enumerate(s):
+            if c == '(':
+                stack.append(i)
+            elif c == ')':
+                if stack:
+                    stack.pop()
+                else:
+                    to_remove.add(i)
+
+        # Add remaining unmatched '(' indices to remove set
+        to_remove.update(stack)
+
+        # Build result string skipping indices in to_remove
+        return ''.join(c for i, c in enumerate(s) if i not in to_remove)

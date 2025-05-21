@@ -8,29 +8,29 @@ class Solution(object):
         # hashmap for each room and count of meetings room_no -> count, 
         # waiting queue of meetings by start time, maybe not needed bc for look
         # array of next open meeting for each room?
-        next_open = [] # (next meeting end time, room no)
-        num_meetings = [0] * n
+        meetings.sort()
         free_rooms = list(range(n))
-        meetings.sort() # might not be needed
-        for s, e in meetings:
-            while next_open and next_open[0][0] <= s:
-                _, i = heapq.heappop(next_open)
-                heapq.heappush(free_rooms, i)
-            if free_rooms:
-                room_no = heapq.heappop(free_rooms)
-                prev_end = s
-            else:
-                prev_end, room_no = heapq.heappop(next_open)
-            num_meetings[room_no] += 1
-            if prev_end < s:
-                prev_end = s
-            heapq.heappush(next_open, (prev_end + (e - s), room_no))
+        heapq.heapify(free_rooms)
+        in_use = []  # min-heap of (end_time, room_no)
+        count = [0] * n
 
-        maxCount = 0
-        max_room = 0
-        for i, count in enumerate(num_meetings):
-            if count > maxCount:
-                max_room = i
-                maxCount = count
-        return max_room
-        
+        for start, end in meetings:
+            duration = end - start
+
+            # Free rooms that are now available
+            while in_use and in_use[0][0] <= start:
+                _, room = heapq.heappop(in_use)
+                heapq.heappush(free_rooms, room)
+
+            if free_rooms:
+                room = heapq.heappop(free_rooms)
+                new_end = start + duration
+            else:
+                earliest_end, room = heapq.heappop(in_use)
+                new_end = earliest_end + duration
+
+            count[room] += 1
+            heapq.heappush(in_use, (new_end, room))
+
+        # Final scan for max meeting count with tie-breaking
+        return max(range(n), key=lambda i: (count[i], -i))

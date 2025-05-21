@@ -25,10 +25,7 @@ class Solution(object):
             if prev_end < s:
                 prev_end = s
             heapq.heappush(next_open, (prev_end + (e - s), room_no))
-            print((prev_end + (e - s), room_no))
-            print(free_rooms)
 
-        print(num_meetings)
         maxCount = 0
         max_room = 0
         for i, count in enumerate(num_meetings):

@@ -4,31 +4,36 @@
 #         self.val = val
 #         self.next = next
 class Solution(object):
-    def mergeKLists(self, lists):
-        """
-        :type lists: List[Optional[ListNode]]
-        :rtype: Optional[ListNode]
-        """
-        dummy = ListNode(0)
-        curr = dummy
-
-        while True:
-            minVal = float('inf')
-            minIndex = -1
-
-            for i in range(len(lists)):
-                if lists[i] and lists[i].val < minVal:
-                    minVal = lists[i].val
-                    minIndex = i
-
-            if minIndex == -1:
-                break
-
-            # Append the smallest node
-            curr.next = lists[minIndex]
-            curr = curr.next
-
-            # Advance in that list
-            lists[minIndex] = lists[minIndex].next
-
-        return dummy.next
+    def mergeKLists(self, lists): 
+        if not lists or len(lists) == 0:
+            return None
+        
+        while len(lists) > 1:
+            temp = []
+            for i in range(0, len(lists), 2):
+                l1 = lists[i]
+                l2 = lists[i+1] if i + 1 < len(lists) else None
+                temp.append(self.merge_lists(l1, l2))
+            lists = temp
+        
+        return lists[0]
+    
+    def merge_lists(self, l1, l2):
+        node = ListNode()
+        ans = node
+        
+        while l1 and l2:
+            if l1.val > l2.val:
+                node.next = l2
+                l2 = l2.next
+            else:
+                node.next = l1
+                l1 = l1.next
+            node = node.next
+        
+        if l1:
+            node.next = l1
+        else:
+            node.next = l2
+        
+        return ans.next

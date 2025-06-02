@@ -37,3 +37,27 @@ class Solution(object):
             node.next = l2
         
         return ans.next
+
+
+# other solution:
+
+# import heapq
+
+# class Solution(object):
+#     def mergeKLists(self, lists):
+#         heap = []
+#         for i, node in enumerate(lists):
+#             if node:
+#                 heapq.heappush(heap, (node.val, i, node))  # (value, list index, node)
+
+#         dummy = ListNode(0)
+#         curr = dummy
+
+#         while heap:
+#             val, i, node = heapq.heappop(heap)
+#             curr.next = node
+#             curr = curr.next
+#             if node.next:
+#                 heapq.heappush(heap, (node.next.val, i, node.next))
+
+#         return dummy.next
